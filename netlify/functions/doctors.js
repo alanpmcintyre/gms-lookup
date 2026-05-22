@@ -4,6 +4,9 @@ exports.handler = async function () {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const xml = await res.text();
 
+    const dateMatch = xml.match(/<FileGenerated>([^<]+)<\/FileGenerated>/);
+    const fileDate = dateMatch ? dateMatch[1].trim() : null;
+
     const doctors = [];
     const blocks = xml.match(/<Doctor>([\s\S]*?)<\/Doctor>/g) || [];
 
@@ -42,7 +45,7 @@ exports.handler = async function () {
         'Content-Type': 'application/json',
         'Cache-Control': 'public, max-age=86400'
       },
-      body: JSON.stringify(doctors)
+      body: JSON.stringify({ doctors, fileDate })
     };
   } catch (err) {
     return {

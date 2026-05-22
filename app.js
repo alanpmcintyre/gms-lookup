@@ -13,11 +13,16 @@ document.getElementById('totalCount').textContent = '...';
 
 fetch('/.netlify/functions/doctors')
   .then(function(r) { return r.json(); })
-  .then(function(data) {
-    DOCTORS     = data;
+  .then(function(res) {
+    DOCTORS     = res.doctors;
     fuseName    = new Fuse(DOCTORS, Object.assign({}, fuseOptions, { keys: ['name'] }));
     fuseAddress = new Fuse(DOCTORS, Object.assign({}, fuseOptions, { keys: ['address'] }));
     document.getElementById('totalCount').textContent = DOCTORS.length.toLocaleString();
+    if (res.fileDate) {
+      var d = new Date(res.fileDate);
+      var formatted = d.toLocaleDateString('en-IE', { day: 'numeric', month: 'long', year: 'numeric' });
+      document.getElementById('pubNote').textContent = 'Source: HSE GMS Scheme · Updated ' + formatted;
+    }
     if (searchInput.value.trim().length >= 2) doSearch();
   })
   .catch(function() {
