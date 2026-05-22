@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GMS Doctor Lookup</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-title">GMS<span>Lookup</span></div>
+  </div>
+  <div class="header-count"><b id="totalCount">-</b> GPs</div>
+</div>
+
+<main>
+  <div class="card">
+    <div class="card-title">GMS Doctor Lookup</div>
+    <div class="card-subtitle">Search the HSE GMS scheme by doctor name or GMS number</div>
+
+    <div class="mode-tabs">
+      <button class="mode-tab active" id="tabExact" onclick="setMode('exact')">
+        <span class="tab-label">Exact search</span>
+        <span class="tab-desc">Precise match &middot; GMS number</span>
+      </button>
+      <button class="mode-tab" id="tabFuzzy" onclick="setMode('fuzzy')">
+        <span class="tab-label">Fuzzy search</span>
+        <span class="tab-desc">Tolerates typos &middot; any word order</span>
+      </button>
+    </div>
+
+    <div class="section-label">Search</div>
+    <div class="input-wrap">
+      <span class="icon">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </span>
+      <input type="text" id="searchInput" placeholder="e.g. 54952 or DR.LUCY MANTLE" autocomplete="off" spellcheck="false" />
+      <button class="clear-btn" id="clearBtn" onclick="clearSearch()" title="Clear">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+          <path d="M18 6 6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+    <p class="hint" id="hintText">Exact &middot; precise name or GMS number match</p>
+
+    <div id="results"></div>
+
+    <p class="pub-note">Source: HSE GMS Scheme &middot; Publication date: 12 March 2026</p>
+  </div>
+
+  <div class="ad-card">
+    <div class="ad-top-row">
+      <div class="ad-icon">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="10" fill="white"/>
+          <polygon points="10,8 10,16 17,12" fill="#1a5ca8"/>
+        </svg>
+      </div>
+    </div>
+    <div class="ad-content">
+      <div class="ad-title">Quick<span>CCS</span></div>
+      <div class="ad-tagline">Clinical decision support for Irish pharmacy</div>
+    </div>
+    <a class="ad-btn" href="https://quickccs.vercel.app/" target="_blank">Try free &rarr;</a>
+  </div>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
+<script src="data.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
