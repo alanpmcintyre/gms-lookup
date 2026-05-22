@@ -8,9 +8,16 @@ exports.handler = async function () {
     const blocks = xml.match(/<Doctor>([\s\S]*?)<\/Doctor>/g) || [];
 
     for (const block of blocks) {
+      const decode = s => s
+        .replace(/&amp;/g, '&')
+        .replace(/&apos;/g, "'")
+        .replace(/&quot;/g, '"')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>');
+
       const get = tag => {
         const m = block.match(new RegExp(`<${tag}>([^<]*)</${tag}>`));
-        return m ? m[1].trim() : '';
+        return m ? decode(m[1].trim()) : '';
       };
 
       if (get('Contract_Status') !== 'Active') continue;
