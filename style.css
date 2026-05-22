@@ -85,6 +85,6 @@
   .ad-icon svg { width: 16px; height: 16px; }
   .ad-title { font-size: 15px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); line-height: 1; }
   .ad-title span { color: var(--blue); }
-  .ad-tagline { font-size: 14px; color: var(--text-dim); }
+  .ad-tagline { font-size: 12px; font-weight: 600; color: var(--text-dim); }
   .ad-btn { flex-shrink: 0; background: var(--blue); color: #fff; text-decoration: none; font-size: 12px; font-weight: 600; padding: 8px 14px; border-radius: 20px; white-space: nowrap; transition: background 0.15s; }
   .ad-btn:hover { background: var(--blue-dark); }
