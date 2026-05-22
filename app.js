@@ -73,8 +73,12 @@ function fuzzySearch(query) {
   return DOCTORS.filter(function(d) { return intersection[d.gms + '|' + d.name]; });
 }
 
+function normalizeQuotes(s) {
+  return s.replace(/[‘’‚‛]/g, "'");
+}
+
 function exactSearch(query) {
-  var q = query.toUpperCase();
+  var q = normalizeQuotes(query).toUpperCase();
   var isNum = /^\d+$/.test(query);
   if (isNum) {
     var exact   = DOCTORS.filter(function(d) { return d.gms === query; });
