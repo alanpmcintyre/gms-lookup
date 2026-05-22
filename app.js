@@ -11,7 +11,7 @@ var timer;
 
 document.getElementById('totalCount').textContent = '...';
 
-fetch('/.netlify/functions/doctors')
+fetch('/.netlify/functions/doctors?v=2')
   .then(function(r) { return r.json(); })
   .then(function(res) {
     DOCTORS     = res.doctors;
