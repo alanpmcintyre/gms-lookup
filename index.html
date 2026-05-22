@@ -18,8 +18,8 @@
 
 <main>
   <div class="card">
-    <div class="card-title">GMS Doctor Lookup</div>
-    <div class="card-subtitle">Search the HSE GMS scheme by doctor name or GMS number</div>
+    <div class="card-title">GMS<span>Lookup</span></div>
+    <div class="card-subtitle">Search for GPs on the GMS Scheme</div>
 
     <div class="mode-tabs">
       <button class="mode-tab active" id="tabExact" onclick="setMode('exact')">
@@ -54,24 +54,23 @@
   </div>
 
   <div class="ad-card">
-    <div class="ad-top-row">
-      <div class="ad-icon">
-        <svg viewBox="0 0 24 24">
-          <circle cx="12" cy="12" r="10" fill="white"/>
-          <polygon points="10,8 10,16 17,12" fill="#1a5ca8"/>
-        </svg>
+    <div class="ad-left">
+      <div class="ad-top">
+        <div class="ad-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="white"/>
+            <polygon points="10,8 10,16 17,12" fill="#1a5ca8"/>
+          </svg>
+        </div>
+        <div class="ad-title">Quick<span>CCS</span></div>
       </div>
+      <div class="ad-tagline">QuickCCS - Common Conditions Service made simple</div>
     </div>
-    <div class="ad-content">
-      <div class="ad-title">Quick<span>CCS</span></div>
-      <div class="ad-tagline">Clinical decision support for Irish pharmacy</div>
-    </div>
-    <a class="ad-btn" href="https://quickccs.vercel.app/" target="_blank">Try free &rarr;</a>
+    <a class="ad-btn" href="https://quickccs.vercel.app/" target="_blank">Try it for free</a>
   </div>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0/dist/fuse.min.js"></script>
-<script src="data.js"></script>
 <script src="app.js"></script>
 </body>
 </html>

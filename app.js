@@ -1,8 +1,6 @@
-﻿document.getElementById('totalCount').textContent = DOCTORS.length.toLocaleString();
-
+var DOCTORS = [];
+var fuseName, fuseAddress;
 var fuseOptions = { threshold: 0.35, distance: 200, minMatchCharLength: 2, includeScore: true };
-var fuseName    = new Fuse(DOCTORS, Object.assign({}, fuseOptions, { keys: ['name'] }));
-var fuseAddress = new Fuse(DOCTORS, Object.assign({}, fuseOptions, { keys: ['address'] }));
 
 var searchInput = document.getElementById('searchInput');
 var clearBtn    = document.getElementById('clearBtn');
@@ -11,15 +9,28 @@ var hintText    = document.getElementById('hintText');
 var currentMode = 'exact';
 var timer;
 
+document.getElementById('totalCount').textContent = '...';
+
+fetch('/.netlify/functions/doctors')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    DOCTORS     = data;
+    fuseName    = new Fuse(DOCTORS, Object.assign({}, fuseOptions, { keys: ['name'] }));
+    fuseAddress = new Fuse(DOCTORS, Object.assign({}, fuseOptions, { keys: ['address'] }));
+    document.getElementById('totalCount').textContent = DOCTORS.length.toLocaleString();
+    if (searchInput.value.trim().length >= 2) doSearch();
+  })
+  .catch(function() {
+    document.getElementById('totalCount').textContent = 'unavailable';
+  });
+
 function setMode(mode) {
   currentMode = mode;
   document.getElementById('tabFuzzy').classList.toggle('active', mode === 'fuzzy');
   document.getElementById('tabExact').classList.toggle('active', mode === 'exact');
   if (mode === 'fuzzy') {
-    searchInput.placeholder = 'e.g. 54952 or DR.LUCY MANTLE';
-    hintText.textContent = 'Fuzzy · word order doesn’t matter · tolerates typos';
+    hintText.textContent = 'Fuzzy · word order doesn\'t matter · tolerates typos';
   } else {
-    searchInput.placeholder = 'e.g. 54952 or DR.LUCY MANTLE';
     hintText.textContent = 'Exact · precise name or GMS number match';
   }
   if (searchInput.value.trim().length >= 2) doSearch();
@@ -44,6 +55,7 @@ function clearSearch() {
 }
 
 function fuzzySearch(query) {
+  if (!fuseName) return [];
   var words = query.trim().split(/\s+/).filter(function(w) { return w.length >= 2; });
   if (words.length === 0) return [];
   var sets = words.map(function(word) {
@@ -69,7 +81,7 @@ function exactSearch(query) {
     var partial = DOCTORS.filter(function(d) { return d.gms !== query && d.gms.includes(query); });
     return exact.concat(partial);
   }
-  return DOCTORS.filter(function(d) { return d.name.includes(q) || d.address.includes(q); });
+  return DOCTORS.filter(function(d) { return d.name.toUpperCase().includes(q) || d.address.toUpperCase().includes(q); });
 }
 
 function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
@@ -80,6 +92,7 @@ function hl(text, words) {
 }
 
 function doSearch() {
+  if (!DOCTORS.length) return;
   var raw = searchInput.value.trim();
   if (raw.length < 2) { resultsDiv.style.display = 'none'; return; }
 
