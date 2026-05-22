@@ -73,19 +73,19 @@ function fuzzySearch(query) {
   return DOCTORS.filter(function(d) { return intersection[d.gms + '|' + d.name]; });
 }
 
-function normalizeQuotes(s) {
-  return s.replace(/[‘’‚‛]/g, "'");
+function normalize(s) {
+  return s.toUpperCase().replace(/[‘’‚‛`]/g, "’");
 }
 
 function exactSearch(query) {
-  var q = normalizeQuotes(query).toUpperCase();
+  var q = normalize(query);
   var isNum = /^\d+$/.test(query);
   if (isNum) {
     var exact   = DOCTORS.filter(function(d) { return d.gms === query; });
     var partial = DOCTORS.filter(function(d) { return d.gms !== query && d.gms.includes(query); });
     return exact.concat(partial);
   }
-  return DOCTORS.filter(function(d) { return d.name.toUpperCase().includes(q) || d.address.toUpperCase().includes(q); });
+  return DOCTORS.filter(function(d) { return normalize(d.name).includes(q) || normalize(d.address).includes(q); });
 }
 
 function escRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
