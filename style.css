@@ -80,7 +80,6 @@
   .lookup-count { margin-top: 6px; color: var(--text-mid); font-weight: 500; }
 
   .header-ad { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 648px; max-width: calc(100% - 40px); display: flex; align-items: center; gap: 9px; text-decoration: none; background: var(--blue-light); border: 1.5px solid #c2d8f4; border-radius: 10px; padding: 7px 10px 7px 10px; transition: background 0.15s; overflow: hidden; }
-  .header-ad:hover { background: #d6e8f7; }
   .header-ad-icon { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .header-ad-icon svg { width: 16px; height: 16px; }
   .header-ad-title { font-size: 14px; font-weight: 700; letter-spacing: -0.02em; color: var(--text); white-space: nowrap; flex-shrink: 0; }
@@ -89,7 +88,7 @@
   .header-ad-tagline { font-size: 13px; font-weight: 500; color: var(--text-dim); white-space: nowrap; }
   @keyframes pulse-btn { 0%, 100% { background: var(--blue); } 50% { background: #2980d9; } }
   .header-ad-btn { flex-shrink: 0; background: var(--blue); color: #fff; font-size: 12px; font-weight: 600; padding: 7px 13px; border-radius: 20px; white-space: nowrap; margin-left: auto; animation: pulse-btn 2s ease-in-out infinite; }
-  .header-ad:hover .header-ad-btn { background: var(--blue-dark); }
+  .header-ad-btn:hover { background: var(--blue-dark) !important; }
 
   @media (max-width: 960px) {
     .header-left, .header-count { display: none; }
