@@ -3,6 +3,7 @@ var fuseName, fuseAddress;
 var fuseOptions = { threshold: 0.35, distance: 200, minMatchCharLength: 2, includeScore: true };
 
 var COUNTER_URL = 'https://api.counterapi.dev/v1/gmslookup/searches';
+var lookupCounted = false;
 
 function updateLookupCountDisplay(count) {
   var el = document.getElementById('lookupCount');
@@ -143,10 +144,13 @@ function render(matches, query, isNum) {
   resultsDiv.appendChild(s);
   if (matches.length === 0) return;
 
-  fetch(COUNTER_URL + '/up')
-    .then(function(r) { return r.json(); })
-    .then(function(d) { updateLookupCountDisplay(d.count); })
-    .catch(function() {});
+  if (!lookupCounted) {
+    lookupCounted = true;
+    fetch(COUNTER_URL + '/up')
+      .then(function(r) { return r.json(); })
+      .then(function(d) { updateLookupCountDisplay(d.count); })
+      .catch(function() {});
+  }
 
   var h = document.createElement('div');
   h.className = 'results-header';
