@@ -79,7 +79,7 @@
   .pub-note { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 24px; }
   .lookup-count { margin-top: 6px; color: var(--text-mid); font-weight: 500; }
 
-  .header-ad { position: absolute; left: 50%; transform: translateX(-50%); width: 648px; max-width: calc(100% - 40px); display: flex; align-items: center; gap: 9px; text-decoration: none; background: var(--blue-light); border: 1.5px solid #c2d8f4; border-radius: 10px; padding: 7px 10px 7px 10px; transition: background 0.15s; overflow: hidden; }
+  .header-ad { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 648px; max-width: calc(100% - 40px); display: flex; align-items: center; gap: 9px; text-decoration: none; background: var(--blue-light); border: 1.5px solid #c2d8f4; border-radius: 10px; padding: 7px 10px 7px 10px; transition: background 0.15s; overflow: hidden; }
   .header-ad:hover { background: #d6e8f7; }
   .header-ad-icon { width: 28px; height: 28px; background: var(--blue); border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .header-ad-icon svg { width: 16px; height: 16px; }
