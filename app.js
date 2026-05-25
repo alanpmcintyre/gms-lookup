@@ -2,6 +2,18 @@ var DOCTORS = [];
 var fuseName, fuseAddress;
 var fuseOptions = { threshold: 0.35, distance: 200, minMatchCharLength: 2, includeScore: true };
 
+var COUNTER_URL = 'https://api.counterapi.dev/v1/gmslookup/searches';
+
+function updateLookupCountDisplay(count) {
+  var el = document.getElementById('lookupCount');
+  if (el && count != null) el.textContent = Number(count).toLocaleString() + ' GP lookups and counting...';
+}
+
+fetch(COUNTER_URL)
+  .then(function(r) { return r.json(); })
+  .then(function(d) { updateLookupCountDisplay(d.count); })
+  .catch(function() {});
+
 var searchInput = document.getElementById('searchInput');
 var clearBtn    = document.getElementById('clearBtn');
 var resultsDiv  = document.getElementById('results');
@@ -130,6 +142,11 @@ function render(matches, query, isNum) {
   }
   resultsDiv.appendChild(s);
   if (matches.length === 0) return;
+
+  fetch(COUNTER_URL + '/up')
+    .then(function(r) { return r.json(); })
+    .then(function(d) { updateLookupCountDisplay(d.count); })
+    .catch(function() {});
 
   var h = document.createElement('div');
   h.className = 'results-header';
