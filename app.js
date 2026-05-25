@@ -39,7 +39,7 @@ fetch('/.netlify/functions/doctors?v=2')
     if (searchInput.value.trim().length >= 2) doSearch();
   })
   .catch(function() {
-    document.getElementById('totalCount').textContent = 'unavailable';
+    document.getElementById('totalCount').textContent = '–';
   });
 
 function setMode(mode) {
