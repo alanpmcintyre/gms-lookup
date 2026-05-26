@@ -49,7 +49,7 @@ function setMode(mode) {
   if (mode === 'fuzzy') {
     hintText.textContent = 'Fuzzy · word order doesn\'t matter · tolerates typos';
   } else {
-    hintText.textContent = 'Exact · precise name or GMS number match';
+    hintText.textContent = 'Exact · precise name, GMS number or IMC number match';
   }
   if (searchInput.value.trim().length >= 2) doSearch();
 }
@@ -99,9 +99,18 @@ function exactSearch(query) {
   var q = normalize(query);
   var isNum = /^\d+$/.test(query);
   if (isNum) {
-    var exact   = DOCTORS.filter(function(d) { return d.gms === query; });
-    var partial = DOCTORS.filter(function(d) { return d.gms !== query && d.gms.includes(query); });
-    return exact.concat(partial);
+    var gmsExact   = DOCTORS.filter(function(d) { return d.gms === query; });
+    var imcExact   = DOCTORS.filter(function(d) { return d.imc === query; });
+    var gmsPartial = DOCTORS.filter(function(d) { return d.gms !== query && d.gms.includes(query); });
+    var imcPartial = DOCTORS.filter(function(d) { return d.imc && d.imc !== query && d.imc.includes(query); });
+    var seen = {};
+    var results = [];
+    [gmsExact, imcExact, gmsPartial, imcPartial].forEach(function(arr) {
+      arr.forEach(function(d) {
+        if (!seen[d.gms]) { seen[d.gms] = true; results.push(d); }
+      });
+    });
+    return results;
   }
   return DOCTORS.filter(function(d) { return normalize(d.name).includes(q) || normalize(d.address).includes(q); });
 }
@@ -127,19 +136,24 @@ function render(matches, query, isNum) {
   resultsDiv.style.display = 'block';
   resultsDiv.innerHTML = '';
 
-  var isExact = isNum && matches.some(function(d) { return d.gms === query; });
+  var isGmsExact = isNum && matches.some(function(d) { return d.gms === query; });
+  var isImcExact = isNum && !isGmsExact && matches.some(function(d) { return d.imc === query; });
   var words   = isNum ? [] : query.trim().split(/\s+/).filter(function(w) { return w.length >= 2; });
 
   var s = document.createElement('div');
   if (matches.length === 0) {
     s.className = 'status-notfound';
     s.innerHTML = '<span class="status-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg></span>' +
-      (isNum ? '<span>GMS number <strong>' + query + '</strong> not found on the scheme list.</span>'
+      (isNum ? '<span>Number <strong>' + query + '</strong> not found on the scheme list.</span>'
              : '<span>No results found for <strong>' + query + '</strong>.</span>');
-  } else if (isExact) {
+  } else if (isGmsExact) {
     s.className = 'status-found';
     s.innerHTML = '<span class="status-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>' +
       '<span>GMS number <strong>' + query + '</strong> confirmed on the scheme list.</span>';
+  } else if (isImcExact) {
+    s.className = 'status-found';
+    s.innerHTML = '<span class="status-icon"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></span>' +
+      '<span>IMC number <strong>' + query + '</strong> confirmed on the scheme list.</span>';
   }
   resultsDiv.appendChild(s);
   if (matches.length === 0) return;
@@ -163,7 +177,10 @@ function render(matches, query, isNum) {
     c.innerHTML =
       '<div class="card-top">' +
         '<div class="doctor-name">' + hl(d.name, words) + '</div>' +
-        '<div class="gms-badge">' + hl(d.gms, isNum ? [query] : []) + '</div>' +
+        '<div class="badge-group">' +
+          '<div class="gms-badge">GMS ' + hl(d.gms, isNum ? [query] : []) + '</div>' +
+          (d.imc ? '<div class="imc-badge">IMC ' + hl(d.imc, isNum ? [query] : []) + '</div>' : '') +
+        '</div>' +
       '</div>' +
       '<div class="doctor-address">' + hl(d.address, words) + '</div>';
     resultsDiv.appendChild(c);

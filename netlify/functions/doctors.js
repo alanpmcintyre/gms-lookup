@@ -27,6 +27,7 @@ exports.handler = async function () {
       if (get('Contract_Status') !== 'Active') continue;
 
       const gms = get('GMS_Number');
+      const imc = get('Medical_Council_Number');
       const name = [get('Forename'), get('Surname')].filter(Boolean).join(' ');
       const address = [
         get('Address_Line1'),
@@ -36,7 +37,7 @@ exports.handler = async function () {
         get('Eircode')
       ].filter(Boolean).filter((v, i, a) => a.indexOf(v) === i).join(', ');
 
-      if (gms) doctors.push({ gms, name, address });
+      if (gms) doctors.push({ gms, imc, name, address });
     }
 
     return {
