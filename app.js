@@ -99,10 +99,11 @@ function exactSearch(query) {
   var q = normalize(query);
   var isNum = /^\d+$/.test(query);
   if (isNum) {
-    var gmsExact   = DOCTORS.filter(function(d) { return d.gms === query; });
-    var imcExact   = DOCTORS.filter(function(d) { return d.imc === query; });
-    var gmsPartial = DOCTORS.filter(function(d) { return d.gms !== query && d.gms.includes(query); });
-    var imcPartial = DOCTORS.filter(function(d) { return d.imc && d.imc !== query && d.imc.includes(query); });
+    var nq = query.replace(/^0+/, '') || '0';
+    var gmsExact   = DOCTORS.filter(function(d) { return (d.gms.replace(/^0+/, '') || '0') === nq; });
+    var imcExact   = DOCTORS.filter(function(d) { return d.imc && (d.imc.replace(/^0+/, '') || '0') === nq; });
+    var gmsPartial = DOCTORS.filter(function(d) { var n = d.gms.replace(/^0+/, '') || '0'; return n !== nq && n.includes(nq); });
+    var imcPartial = DOCTORS.filter(function(d) { if (!d.imc) return false; var n = d.imc.replace(/^0+/, '') || '0'; return n !== nq && n.includes(nq); });
     var seen = {};
     var results = [];
     [gmsExact, imcExact, gmsPartial, imcPartial].forEach(function(arr) {
@@ -136,8 +137,9 @@ function render(matches, query, isNum) {
   resultsDiv.style.display = 'block';
   resultsDiv.innerHTML = '';
 
-  var isGmsExact = isNum && matches.some(function(d) { return d.gms === query; });
-  var isImcExact = isNum && !isGmsExact && matches.some(function(d) { return d.imc === query; });
+  var nq = isNum ? (query.replace(/^0+/, '') || '0') : query;
+  var isGmsExact = isNum && matches.some(function(d) { return (d.gms.replace(/^0+/, '') || '0') === nq; });
+  var isImcExact = isNum && !isGmsExact && matches.some(function(d) { return d.imc && (d.imc.replace(/^0+/, '') || '0') === nq; });
   var words   = isNum ? [] : query.trim().split(/\s+/).filter(function(w) { return w.length >= 2; });
 
   var s = document.createElement('div');
